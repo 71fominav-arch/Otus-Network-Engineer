@@ -67,7 +67,9 @@
 #### Москва настройка коммутаторов
 SW4, SW5 коммутаторы агрегации/ядра.      
 SW3, SW2 коммутаторы доступа.     
-Настроен режим spanning-tree mode mst     
+Настроен режим spanning-tree mode mst   
+Интерфейсы Vlan 11 и Vlan 17 настраиваем на коммутаторах SW4, SW5
+HSRP для Vlan 11 и Vlan 17 Active на SW4
 Пример SW4     
  spanning-tree mst configuration     
  name Moscow      
@@ -79,11 +81,13 @@ SW3, SW2 коммутаторы доступа.
  ip address 10.128.0.2 255.255.255.0    
  standby 11 ip 10.128.0.1    
  standby 11 priority 140    
+ standby 11 preempt         
 !     
 interface Vlan17    
  ip address 10.128.1.2 255.255.255.0    
  standby 17 ip 10.128.1.1    
- standby 17 priority 140   
+ standby 17 priority 140      
+ standby 17 preempt
 !    
 interface Vlan100    
  ip address 10.0.0.4 255.255.255.240    
