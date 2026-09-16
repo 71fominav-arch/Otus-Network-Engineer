@@ -64,6 +64,21 @@
 | R19        | 10.250.19.250/32 | 10.0.0.33/30  |  |  |  |  |  |  |
 | R20        | 10.250.20.250/32 | 10.0.0.53/30  |  |  |  |  |  |  |    
 
+#### Москва настройка коммутаторов
+SW4, SW5 коммутаторы агрегации/ядра.      
+SW3, SW2 коммутаторы доступа.     
+Настроен режим spanning-tree mode mst
+Пример SW4     
+ spanning-tree mst configuration     
+ name Moscow      
+ revision 1      
+ instance 1 vlan 11, 17, 100    
+ spanning-tree mst 1 priority 16384   //  SW4 root     
+ Конец SW4     
+
+
+
+
 ### Москва    
 ![Москва](./Moscow.png)
 
