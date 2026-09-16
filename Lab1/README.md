@@ -86,16 +86,26 @@ spanning-tree mode rapid-pvst
 spanning-tree extend system-id     
 spanning-tree vlan 1-4094 priority 24576      
 
-interface Vlan8
- ip address 10.128.16.2 255.255.255.0
- standby 8 ip 10.128.16.1
- standby 8 priority 80
-!
-interface Vlan10
- ip address 10.128.17.2 255.255.255.0
- standby 10 ip 10.128.17.1
- standby 10 priority 120
+interface Vlan8     
+ ip address 10.128.16.2 255.255.255.0     
+ standby 8 ip 10.128.16.1     
+ standby 8 priority 80     
+!     
+interface Vlan10    
+ ip address 10.128.17.2 255.255.255.0    
+ standby 10 ip 10.128.17.1     
+ standby 10 priority 120    
 
+ SW9#show standby brief    
+                     P indicates configured to preempt.    
+                     |    
+Interface   Grp  Pri P State   Active          Standby         Virtual IP     
+Vl8         8    80    Active  local           10.128.16.3     10.128.16.1     
+Vl10        10   120   Standby 10.128.17.3     local           10.128.17.1       
+
+
+#### end SW9     
+    
 #### SW10
 
 spanning-tree mode rapid-pvst    
@@ -113,7 +123,18 @@ interface Vlan10
  ip address 10.128.17.3 255.255.255.0     
  standby 10 ip 10.128.17.1    
  standby 10 priority 180     
+
+SW10#show standby brief     
+                     P indicates configured to preempt.    
+                     |     
+Interface   Grp  Pri P State   Active          Standby         Virtual IP    
+Vl8         8    40    Standby 10.128.16.2     local           10.128.16.1     
+Vl10        10   180   Active  local           10.128.17.2     10.128.17.1     
+
 ####  end SW10
+
+
+
 
 ### С-Петербург       
 ![С-Петербург](./Piter.png)      
