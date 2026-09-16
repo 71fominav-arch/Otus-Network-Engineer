@@ -80,7 +80,40 @@
 
 ### Пользовательские сети 
 
-#### SW9
+#### SW9 
+
+spanning-tree mode rapid-pvst     
+spanning-tree extend system-id     
+spanning-tree vlan 1-4094 priority 24576      
+
+interface Vlan8
+ ip address 10.128.16.2 255.255.255.0
+ standby 8 ip 10.128.16.1
+ standby 8 priority 80
+!
+interface Vlan10
+ ip address 10.128.17.2 255.255.255.0
+ standby 10 ip 10.128.17.1
+ standby 10 priority 120
+
+#### SW10
+
+spanning-tree mode rapid-pvst    
+spanning-tree extend system-id    
+spanning-tree vlan 1-4094 priority 28672    
+        
+interface Vlan8     
+ description to_VPC8     
+ ip address 10.128.16.3 255.255.255.0     
+ standby 8 ip 10.128.16.1     
+ standby 8 priority 40     
+!   
+interface Vlan10      
+ description to_VPC      
+ ip address 10.128.17.3 255.255.255.0     
+ standby 10 ip 10.128.17.1    
+ standby 10 priority 180     
+####  end SW10
 
 ### С-Петербург       
 ![С-Петербург](./Piter.png)      
