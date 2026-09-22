@@ -63,7 +63,15 @@ interface Ethernet0/1
 После таких настроек трафик от VPC к 8.8.8.8 пойдет через 10.0.20.34.         
                 
 ### 3. Настроите отслеживание линка через технологию IP SLA.(только для IPv4)           
-
+На R18 для примера настроим на интерфейсах E0/2 и E0/3            
+!            
+ip sla 10                 
+ icmp-echo 10.0.20.14 source-ip 10.0.20.13               
+ip sla schedule 10 life forever start-time now               
+ip sla 20             
+ icmp-echo 10.0.20.34 source-ip 10.0.20.33           
+ip sla schedule 20 life forever start-time now            
+!                
 
 
 ### 4. Настройте для офиса Лабытнанги маршрут по-умолчанию.      
