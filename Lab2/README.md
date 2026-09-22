@@ -14,6 +14,27 @@
 ![Схема подключения](./Piter.png)           
 
 В офисе С-Петербург есть только один пограничный маршрутизатор R18 отвечающий за подключение к двум ISP R24 и R26.            
+Допустим R24 основной провайдер
+Тогда на R18 завернем на R24 весь трафик командой                
+ip route 0.0.0.0 0.0.0.0 10.0.20.14           
+Резервный маршрут пропишем
+ip route 0.0.0.0 0.0.0.0 10.0.20.34 200
+Таблица маршрутизации после этого будет выглядеть таким образом:         
+R18#show ip route            
+Gateway of last resort is 10.0.20.14 to network 0.0.0.0                  
+
+S*    0.0.0.0/0 [1/0] via 10.0.20.14                  
+      10.0.0.0/8 is variably subnetted, 9 subnets, 2 masks                
+C        10.0.2.16/30 is directly connected, Ethernet0/0              
+L        10.0.2.18/32 is directly connected, Ethernet0/0                
+C        10.0.2.24/30 is directly connected, Ethernet0/1               
+L        10.0.2.26/32 is directly connected, Ethernet0/1              
+C        10.0.20.12/30 is directly connected, Ethernet0/2                
+L        10.0.20.13/32 is directly connected, Ethernet0/2                
+C        10.0.20.32/30 is directly connected, Ethernet0/3               
+L        10.0.20.33/32 is directly connected, Ethernet0/3                   
+C        10.250.18.250/32 is directly connected, Loopback0                     
+                    
 
 
 
