@@ -137,7 +137,7 @@ ip route 0.0.0.0 0.0.0.0 10.0.20.29 100 track 20
                   
 ip access-list extended PBR_VPC_Google              
  permit ip 10.128.33.0 0.0.0.255 host 8.8.8.8            
-ip access-list extended PBR_VPC_Google_2             
+ip access-list extended PBR_VPC_Google_2     /* сделал правило для проверки переключения первого канала        
  permit ip any host 8.8.4.4               
 !             
 ip sla 10  /*проверка канала до R25              
