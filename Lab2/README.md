@@ -127,7 +127,7 @@ C        10.250.28.250/32 is directly connected, Loopback0
 R28#
 
 ### А теперь сделаем схему по которой каналы будут переключаться автоматически.
-
+### R28
 track 10 ip sla 10 reachability                
 !               
 track 20 ip sla 20 reachability              
@@ -157,4 +157,4 @@ route-map PBR_VPC_GOOGLE permit 30
  match ip address PBR_VPC_Google_2            
  set ip next-hop verify-availability 10.0.20.25 10 track 10 /* проверка канала до R25, если не работает то маршрут из таблицы маршрутизации              
 
-
+### Каналы переключаются 
