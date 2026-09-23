@@ -9,33 +9,32 @@
 4. Настройте для офиса Лабытнанги маршрут по-умолчанию.                
 5. План работы и изменения зафиксированы в документации .                 
 
-### 1. За пример возьмем офис С-Петербург             
+### 1. За пример возьмем офис Чокурдах            
 
-![Схема подключения](./Piter.png)           
+![Схема подключения](./Chokurdah.png)           
 
-В офисе С-Петербург есть только один пограничный маршрутизатор R18 отвечающий за подключение к двум ISP R24 и R26.            
+В офисе Чокурдах есть только один пограничный маршрутизатор R28 отвечающий за подключение к двум ISP R25 и R26.            
 Допустим R24 основной провайдер
-Тогда на R18 завернем на R24 весь трафик командой                
-ip route 0.0.0.0 0.0.0.0 10.0.20.14 1          
+Тогда на R28 завернем на R25 весь трафик командой                
+ip route 0.0.0.0 0.0.0.0 10.0.20.25 1          
 Резервный маршрут пропишем в сторону R26
-ip route 0.0.0.0 0.0.0.0 10.0.20.34 1              
+ip route 0.0.0.0 0.0.0.0 10.0.20.29 1              
 Таблица маршрутизации после этого будет выглядеть таким образом:          
-R18#show ip route            
-Gateway of last resort is 10.0.20.14 to network 0.0.0.0                  
+R28#show ip route            
+Gateway of last resort is 10.0.20.29 to network 0.0.0.0                  
 
-S*    0.0.0.0/0 [1/0] via 10.0.20.34                         
-                [1/0] via 10.0.20.14 /* Вариант c ecmp, трафик распределяется между двумя провайдерами. Хороший вариант только с Nat, иначе возможен вариант когда трафик исходящий идет через один интерфейс, входящий через другой.                
-      10.0.0.0/8 is variably subnetted, 9 subnets, 2 masks               
-C        10.0.2.16/30 is directly connected, Ethernet0/0              
-L        10.0.2.18/32 is directly connected, Ethernet0/0              
-C        10.0.2.24/30 is directly connected, Ethernet0/1            
-L        10.0.2.26/32 is directly connected, Ethernet0/1            
-C        10.0.20.12/30 is directly connected, Ethernet0/2             
-L        10.0.20.13/32 is directly connected, Ethernet0/2           
-C        10.0.20.32/30 is directly connected, Ethernet0/3             
-L        10.0.20.33/32 is directly connected, Ethernet0/3             
-C        10.250.18.250/32 is directly connected, Loopback0                  
-                  
+S*    0.0.0.0/0 [1/0] via 10.0.20.29          
+                [1/0] via 10.0.20.25 /* Вариант c ecmp, трафик распределяется между двумя провайдерами. Хороший вариант только с Nat, иначе возможен вариант когда трафик исходящий идет через один интерфейс, входящий через другой.                   
+      10.0.0.0/8 is variably subnetted, 8 subnets, 3 masks                    
+C        10.0.4.0/30 is directly connected, Ethernet0/2                     
+L        10.0.4.2/32 is directly connected, Ethernet0/2                
+C        10.0.20.24/30 is directly connected, Ethernet0/1              
+L        10.0.20.26/32 is directly connected, Ethernet0/1            
+C        10.0.20.28/30 is directly connected, Ethernet0/0              
+L        10.0.20.30/32 is directly connected, Ethernet0/0                 
+S        10.128.32.0/23 [1/0] via 10.0.4.1                
+C        10.250.28.250/32 is directly connected, Loopback0                      
+                                
 Возьмем вариант два. С применение PBR.            
 На R18 пропишем два маршрута с разными метриками.                                
 ip route 0.0.0.0 0.0.0.0 10.0.20.14               
