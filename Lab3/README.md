@@ -97,11 +97,24 @@ interface Ethernet0/3
  no passive-interface Ethernet0/3          
 !            
 / *********** end R12 *************** /                    
+       
+### R14, R15 должны передавать маршрут по умолчанию.          
 
-
-
-
-
+Настройки R14         
+/ ********** R14 *********** /
+ip route 0.0.0.0 0.0.0.0 10.0.16.2                
+router ospf 10           
+ default-information originate                     
+!             
+/ ********** R14 *********** /               
+                  
+Настройки R15         
+/ ********** R15 *********** /
+ip route 0.0.0.0 0.0.0.0 10.0.18.2                
+router ospf 10           
+ default-information originate                     
+!             
+/ ********** R15 *********** /               
 
 
 
