@@ -100,7 +100,7 @@ interface Ethernet0/3
 ### R14, R15 должны передавать маршрут по умолчанию.          
 
 Настройки R14         
-/ ********** R14 *********** /
+/ ********** R14 *********** /                 
 ip route 0.0.0.0 0.0.0.0 10.0.16.2                
 router ospf 10           
  default-information originate                     
@@ -114,6 +114,48 @@ router ospf 10
  default-information originate                     
 !             
 / ********** R15 *********** /               
+
+Таблица маршрутизации R12.   
+/ *********** show ip route ****************** /                  
+O*E2  0.0.0.0/0 [110/1] via 10.0.0.38, 02:44:37, Ethernet0/2            
+      10.0.0.0/8 is variably subnetted, 27 subnets, 4 masks              
+O        10.0.0.0/28 [110/11] via 10.0.0.25, 02:44:09, Ethernet0/1               
+                     [110/11] via 10.0.0.17, 02:43:59, Ethernet0/0            
+C        10.0.0.16/30 is directly connected, Ethernet0/0               
+L        10.0.0.18/32 is directly connected, Ethernet0/0                 
+O        10.0.0.20/30 [110/11] via 10.0.0.17, 02:43:59, Ethernet0/0          
+C        10.0.0.24/30 is directly connected, Ethernet0/1            
+L        10.0.0.26/32 is directly connected, Ethernet0/1             
+O        10.0.0.28/30 [110/11] via 10.0.0.25, 02:44:09, Ethernet0/1             
+O IA     10.0.0.32/30 [110/20] via 10.0.0.38, 02:44:37, Ethernet0/2            
+C        10.0.0.36/30 is directly connected, Ethernet0/2              
+L        10.0.0.37/32 is directly connected, Ethernet0/2              
+C        10.0.0.40/30 is directly connected, Ethernet0/3              
+L        10.0.0.41/32 is directly connected, Ethernet0/3            
+O IA     10.0.0.44/30 [110/20] via 10.0.0.38, 02:44:37, Ethernet0/2             
+O        10.0.0.48/30 [110/20] via 10.0.0.42, 02:44:47, Ethernet0/3               
+O IA     10.0.0.52/30 [110/30] via 10.0.0.42, 02:03:38, Ethernet0/3              
+                      [110/30] via 10.0.0.38, 02:03:38, Ethernet0/2           
+O IA     10.0.16.0/30 [110/20] via 10.0.0.38, 02:44:37, Ethernet0/2            
+O IA     10.0.18.0/30 [110/30] via 10.0.0.42, 02:44:47, Ethernet0/3            
+                      [110/30] via 10.0.0.38, 02:44:37, Ethernet0/2           
+O        10.128.0.0/24 [110/11] via 10.0.0.25, 02:44:09, Ethernet0/1           
+                       [110/11] via 10.0.0.17, 02:43:59, Ethernet0/0               
+O        10.128.1.0/24 [110/11] via 10.0.0.25, 02:44:09, Ethernet0/1          
+                       [110/11] via 10.0.0.17, 02:43:59, Ethernet0/0             
+O        10.250.4.250/32 [110/11] via 10.0.0.17, 02:43:59, Ethernet0/0               
+O        10.250.5.250/32 [110/11] via 10.0.0.25, 02:44:09, Ethernet0/1              
+C        10.250.12.250/32 is directly connected, Loopback0             
+O        10.250.13.250/32 [110/11] via 10.0.0.42, 02:44:47, Ethernet0/3          
+O IA     10.250.14.250/32 [110/11] via 10.0.0.38, 02:44:37, Ethernet0/2            
+O IA     10.250.15.250/32 [110/21] via 10.0.0.42, 02:44:47, Ethernet0/3             
+                          [110/21] via 10.0.0.38, 02:44:37, Ethernet0/2          
+O IA     10.250.19.250/32 [110/21] via 10.0.0.38, 02:44:37, Ethernet0/2             
+O IA     10.250.20.250/32 [110/31] via 10.0.0.42, 01:45:01, Ethernet0/3               
+                          [110/31] via 10.0.0.38, 01:45:01, Ethernet0/2                     
+                 
+/ *********** end show ip route ****************** /                 
+
                          
 ## 3. Маршрутизатор R19 находится в зоне 101 и получает только маршрут по умолчанию.              
 
