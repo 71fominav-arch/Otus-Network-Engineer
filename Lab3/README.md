@@ -22,16 +22,15 @@
                     
 ### Пример конфигурации R14           
 / ****** R14 *********/                
-router ospf 10                 
+router ospf 10 /* включаем процесс */                                   
  router-id 10.250.14.250                    
- passive-interface default           
- no passive-interface Ethernet0/0           
+ passive-interface default /* по умолчанию все интерфейсы в пассив режиме, не ищут соседей */               
+ no passive-interface Ethernet0/0 /* поиск соседей на интерфейсе e0/0 */                         
  no passive-interface Ethernet0/1           
- no passive-interface Ethernet0/3           
- default-information originate        
+ no passive-interface Ethernet0/3                   
  !         
 interface Loopback0             
- ip address 10.250.14.250 255.255.255.255         
+ ip address 10.250.14.250 255.255.255.255                  
  ip ospf 10 area 0            
 !
 interface Ethernet0/0          
@@ -54,7 +53,22 @@ interface Ethernet0/3
  ip address 10.0.0.34 255.255.255.252             
  ip ospf 10 area 101           
 !                      
-/ ********* end R14 ************/                     
+/ ********* end R14 ************/                  
+
 
 ## 2. Маршрутизаторы R12-R13 находятся в зоне 10. Дополнительно к маршрутам должны получать маршрут по умолчанию.         
+
+Маршрутизаторы R12-R13, а также коммутаторы SW4, SW5 находятся в зоне 10. Тип normal. R14, R15 должны передавать маршрут по умолчанию.         
+
+Все устройства R12, R13, SW4, SW5 полностью в зоне 10, ABR для зоны 10 R14,R15.
+Пример настройки 
+
+
+
+
+
+
+
+
+
 
