@@ -61,7 +61,47 @@ interface Ethernet0/3
 Маршрутизаторы R12-R13, а также коммутаторы SW4, SW5 находятся в зоне 10. Тип normal. R14, R15 должны передавать маршрут по умолчанию.         
 
 Все устройства R12, R13, SW4, SW5 полностью в зоне 10, ABR для зоны 10 R14,R15.
-Пример настройки 
+Пример настройки R12          
+/ **************** R12 ************** /
+                    
+interface Loopback0                 
+ ip address 10.250.12.250 255.255.255.255              
+ ip ospf 10 area 10            
+!                
+interface Ethernet0/0             
+ description to_SW4                
+ ip address 10.0.0.18 255.255.255.252               
+ ip ospf 10 area 10              
+!                 
+interface Ethernet0/1                
+ description to_SW5               
+ ip address 10.0.0.26 255.255.255.252           
+ ip ospf 10 area 10           
+!              
+interface Ethernet0/2          
+ description to_R14             
+ ip address 10.0.0.37 255.255.255.252           
+ ip ospf 10 area 10           
+!              
+interface Ethernet0/3         
+ description to_R13            
+ ip address 10.0.0.41 255.255.255.252            
+ ip ospf 10 area 10             
+ !           
+ router ospf 10           
+ router-id 10.250.12.250            
+ passive-interface default          
+ no passive-interface Ethernet0/0         
+ no passive-interface Ethernet0/1           
+ no passive-interface Ethernet0/2            
+ no passive-interface Ethernet0/3          
+!            
+/ *********** end R12 *************** /                    
+
+
+
+
+
 
 
 
