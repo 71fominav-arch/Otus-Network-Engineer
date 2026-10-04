@@ -14,5 +14,7 @@
          
 | Маршрутизатор    | E0/0 | E0/1 | E0/2 | E0/3 | Loopback 0 |              
 |------------------|------|------|------|------|------------|             
-| R14 | area 10 | area 0 | area 0 | area 101 |              
-| R15 | area 10 | area 0 | area 0 | area 102 |                 
+| R14 | area 10 | area 0 | area 0 | area 101 | area 0 |             
+| R15 | area 10 | area 0 | area 0 | area 102 | area 0 |                               
+
+
