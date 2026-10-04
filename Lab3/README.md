@@ -17,7 +17,9 @@
 | R14 | area 10 | area 0 | area 0 | area 101 | area 0 |             
 | R15 | area 10 | area 0 | area 0 | area 102 | area 0 |                        
 !          
-Настройки на R14          
+Настройки на R14         
+
+### Пример конфигурации R14           
 /****** R14 *********/                
 router ospf 10                 
  router-id 10.250.14.250                    
