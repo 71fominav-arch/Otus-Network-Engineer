@@ -118,7 +118,7 @@ router ospf 10
                          
 ## 3. Маршрутизатор R19 находится в зоне 101 и получает только маршрут по умолчанию.              
 
-Для того, чтобы получать только маршрут по умолчанию делаем area 101 stub.          
+Для того, чтобы получать только маршрут по умолчанию делаем area 101 stub. В area 101 входят два роутера R19 и R14 интерфейсом e0/3 (R14 ABR)                            
 Настройки R19              
 / *********** R19 *************** /                      
 interface Loopback0             
@@ -141,6 +141,52 @@ router ospf 10
  area 101 stub no-summary          
  default-information originate          
 / ************* end R14 ***************** /                
+Таблица маршрутизации R19.   
+/ *********** show ip route ****************** /                  
+O*IA  0.0.0.0/0 [110/11] via 10.0.0.34, 02:20:21, Ethernet0/0            
+      10.0.0.0/8 is variably subnetted, 3 subnets, 2 masks          
+C        10.0.0.32/30 is directly connected, Ethernet0/0         
+L        10.0.0.33/32 is directly connected, Ethernet0/0       
+C        10.250.19.250/32 is directly connected, Loopback0               
+/ *********** end show ip route ****************** /                 
+
+## 4. Маршрутизатор R20 находится в зоне 102 и получает все маршруты, кроме маршрутов до сетей зоны 101.
+
+В зоне 102 находятся два Router, R20 и R15 (e0/3 ABR). Area normal.                
+
+/ ************ R20 ************** /                  
+!              
+interface Loopback0             
+ ip address 10.250.20.250 255.255.255.255             
+ ip ospf 10 area 102          
+!         
+interface Ethernet0/0            
+ description to_R15                
+ ip address 10.0.0.53 255.255.255.252          
+ ip ospf 10 area 102           
+!           
+router ospf 10         
+ router-id 10.250.20.250          
+ passive-interface default         
+ no passive-interface Ethernet0/0             
+!
+/ ************ end R20 ************** /                
+
+### Получает все кроме маршрутов до сетей зоны 101.
+
+/ ************ R15 ************** /                 
+router ospf 10            
+ area 102 filter-list prefix OSPF-FILTER-R20-IN in                 
+!             
+ip prefix-list OSPF-FILTER-R20-IN seq 20 deny 10.0.0.32/30  /* маршрут из зоны 101                   
+ip prefix-list OSPF-FILTER-R20-IN seq 30 deny 10.250.19.250/32 /* маршрут из зоны 101              
+ip prefix-list OSPF-FILTER-R20-IN seq 100 permit 0.0.0.0/0 le 32 /* разрешить все остальные                         
+/ ************ end R15 ************** /                
+
+
+
+
+
 
 
 
