@@ -47,7 +47,10 @@
       is-type level-2-only                     
       authentication mode md5           
       metric-style wide              
-      log-adjacency-changes            
+      log-adjacency-changes
+      passive-interface default   /* по умолчанию все интерфейсы в режим passive                        
+      no passive-interface Ethernet0/1                  
+      no passive-interface Ethernet0/2                
       !             
       address-family ipv6          
       multi-topology           
@@ -55,13 +58,6 @@
       !                    
                         
 5. Настройка ISIS на интерфейсах                 
-
-      interface Loopback0       
-      ip router isis 100           
-      !             
-      interface Ethernet0/0          
-      ip router isis 100            
-      ipv6 router isis 100              
       !            
       interface Ethernet0/1                                  
       ip router isis 100      /* включить протокол маршрутизации на интерфейсе         
