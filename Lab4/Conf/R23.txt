@@ -1,8 +1,8 @@
 Building configuration...
 
-Current configuration : 1658 bytes
+Current configuration : 1749 bytes
 !
-! Last configuration change at 17:47:35 EKB Mon Oct 26 2026
+! Last configuration change at 20:10:17 EKB Mon Oct 26 2026
 !
 version 15.4
 service timestamps debug datetime msec
@@ -13,6 +13,8 @@ hostname R23
 !
 boot-start-marker
 boot-end-marker
+!
+!
 !
 no aaa new-model
 clock timezone EKB 5 0
@@ -31,27 +33,24 @@ redundancy
 !
 interface Loopback0
  ip address 10.250.23.250 255.255.255.255
- ip router isis 100
 !
 interface Ethernet0/0
  ip address 10.0.16.6 255.255.255.252
- ip router isis 100
  ipv6 address FD00::2300:1/112
- ipv6 router isis 100
 !
 interface Ethernet0/1
  ip address 10.0.20.1 255.255.255.252
  ip router isis 100
  ipv6 address FD00::2301:1/112
  ipv6 router isis 100
- isis password cisco123 level-2
+ isis network point-to-point
 !
 interface Ethernet0/2
  ip address 10.0.20.6 255.255.255.252
  ip router isis 100
  ipv6 address FD00::2302:1/112
  ipv6 router isis 100
- isis password cisco123 level-2
+ isis network point-to-point
 !
 interface Ethernet0/3
  no ip address
@@ -79,9 +78,15 @@ router isis 100
  authentication mode md5
  metric-style wide
  log-adjacency-changes
+ passive-interface default
+ no passive-interface Ethernet0/1
+ no passive-interface Ethernet0/2
+ !
+ address-family ipv6
+  multi-topology
+ exit-address-family
 !
 ip forward-protocol nd
-!
 !
 no ip http server
 no ip http secure-server

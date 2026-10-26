@@ -1,6 +1,8 @@
-Current configuration : 1743 bytes
+Building configuration...
+
+Current configuration : 1795 bytes
 !
-! Last configuration change at 17:59:16 EKB Mon Oct 26 2026
+! Last configuration change at 20:29:54 EKB Mon Oct 26 2026
 !
 version 15.4
 service timestamps debug datetime msec
@@ -29,33 +31,28 @@ redundancy
 !
 interface Loopback0
  ip address 10.250.24.250 255.255.255.255
- ip router isis 100
 !
 interface Ethernet0/0
  ip address 10.0.18.10 255.255.255.252
- ip router isis 100
  ipv6 address FD00::2400:1/112
- ipv6 router isis 100
 !
 interface Ethernet0/1
  ip address 10.0.20.9 255.255.255.252
  ip router isis 100
  ipv6 address FD00::2401:1/112
  ipv6 router isis 100
- isis password cisco123 level-2
+ isis network point-to-point
 !
 interface Ethernet0/2
  ip address 10.0.20.5 255.255.255.252
  ip router isis 100
  ipv6 address FD00::2302:2/112
  ipv6 router isis 100
- isis password cisco123 level-2
+ isis network point-to-point
 !
 interface Ethernet0/3
  ip address 10.0.20.14 255.255.255.252
- ip router isis 100
  ipv6 address FD00::2403:1/112
- ipv6 router isis 100
 !
 interface Ethernet1/0
  no ip address
@@ -74,14 +71,20 @@ interface Ethernet1/3
  shutdown
 !
 router isis 100
- net 49.2401.0250.0242.5000
+ net 49.0024.0102.5002.4250.00
  is-type level-2-only
  authentication mode md5
  metric-style wide
  log-adjacency-changes
+ passive-interface default
+ no passive-interface Ethernet0/1
+ no passive-interface Ethernet0/2
+ !
+ address-family ipv6
+  multi-topology
+ exit-address-family
 !
 ip forward-protocol nd
-!
 !
 no ip http server
 no ip http secure-server
