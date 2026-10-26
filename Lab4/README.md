@@ -8,6 +8,14 @@
 ### Схема сети Триада            
 ![Триада сеть](./Triada.png)
 
+
+### Пояснения к схеме             
+   Всего 4 маршрутизатора    
+   R23 net 49.2222.0102.5002.3250.00          
+   R24 net 49.2401.0250.0242.5000          
+   R25 net 49.2222.0102.5002.5250.00            
+   R26 net 49.2601.0250.0262.5000              
+
 ### Настройки маршрутизатора R23
 
 1. IPv4 уже настроен.
@@ -26,15 +34,16 @@
       interface Ethernet0/2           
           ip address 10.0.20.6 255.255.255.252             
           ipv6 address FD00::2302:1/112
-3. Включим ISIS
-      router isis 100
-      net 49.2222.0102.5002.3250.00
-      is-type level-2-only
-      authentication mode md5
-      metric-style wide
-      log-adjacency-changes
+3. Включим ISIS                      
+      router isis 100               
+      net 49.2222.0102.5002.3250.00               
+      is-type level-2-only                     
+      authentication mode md5           
+      metric-style wide              
+      log-adjacency-changes            
       address-family ipv6
-4. Настройка ISIS на интерфейсах
+                        
+5. Настройка ISIS на интерфейсах                 
 
       interface Loopback0       
       ip router isis 100           
@@ -44,8 +53,8 @@
       ipv6 router isis 100              
       !            
       interface Ethernet0/1                                  
-      ip router isis 100      /*          
-      ipv6 router isis 100             
+      ip router isis 100      /* включить протокол маршрутизации на интерфейсе         
+      ipv6 router isis 100   /* включить протокол маршрутизации на интерфейсе                       
       isis password cisco123 level-2  /* авторизация с соседом                
       !                  
       interface Ethernet0/2               
