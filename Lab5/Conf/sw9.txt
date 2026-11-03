@@ -1,0 +1,206 @@
+Building configuration...
+
+Current configuration : 3419 bytes
+!
+! Last configuration change at 08:49:52 UTC Tue Nov 3 2026
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname SW9
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+spanning-tree vlan 1-4094 priority 24576
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 10.250.9.250 255.255.255.255
+ ipv6 address FD00::FF01:9/128
+!
+interface Port-channel1
+ switchport trunk allowed vlan 8,10
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/0
+ switchport trunk allowed vlan 8,10
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 1 mode active
+!
+interface Ethernet0/1
+ switchport trunk allowed vlan 8,10
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 1 mode active
+!
+interface Ethernet0/2
+ switchport access vlan 8
+!
+interface Ethernet0/3
+ description to_R17
+ switchport access vlan 101
+!
+interface Ethernet1/0
+ switchport access vlan 102
+!
+interface Ethernet1/1
+!
+interface Ethernet1/2
+!
+interface Ethernet1/3
+!
+interface Vlan8
+ description to_VPC8
+ ip address 10.128.16.2 255.255.255.0
+ standby 8 ip 10.128.16.1
+ standby 8 priority 80
+ ipv6 address FE80::9 link-local
+ ipv6 address FD00::802/120
+!
+interface Vlan10
+ description to_VPC
+ ip address 10.128.17.2 255.255.255.0
+ standby 10 ip 10.128.17.1
+ standby 10 priority 120
+ ipv6 address FE80::9 link-local
+ ipv6 address FD00::902/120
+!
+interface Vlan101
+ description to_R17
+ ip address 10.0.2.1 255.255.255.252
+ ipv6 address FE80::9 link-local
+ ipv6 address FD00::1102/124
+!
+interface Vlan102
+ description to_R16
+ ip address 10.0.2.13 255.255.255.252
+ ipv6 address FE80::9 link-local
+ ipv6 address FD00::1022/124
+!
+!
+router eigrp Piter
+ !
+ address-family ipv4 unicast autonomous-system 100
+  !
+  af-interface default
+   passive-interface
+  exit-af-interface
+  !
+  af-interface Vlan8
+   no passive-interface
+  exit-af-interface
+  !
+  af-interface Vlan10
+   no passive-interface
+  exit-af-interface
+  !
+  af-interface Vlan101
+   summary-address 10.128.16.0 255.255.254.0
+   no passive-interface
+  exit-af-interface
+  !
+  af-interface Vlan102
+   summary-address 10.128.16.0 255.255.254.0
+   no passive-interface
+  exit-af-interface
+  !
+  topology base
+  exit-af-topology
+  network 10.0.2.0 0.0.0.3
+  network 10.0.2.12 0.0.0.3
+  network 10.128.16.0 0.0.0.255
+  network 10.128.17.0 0.0.0.255
+  network 10.250.9.250 0.0.0.0
+  eigrp router-id 10.250.9.250
+ exit-address-family
+ !
+ address-family ipv6 unicast autonomous-system 200
+  !
+  af-interface default
+   passive-interface
+  exit-af-interface
+  !
+  af-interface Vlan8
+   no passive-interface
+  exit-af-interface
+  !
+  af-interface Vlan10
+   no passive-interface
+  exit-af-interface
+  !
+  af-interface Vlan101
+   summary-address FD00::800/119
+   no passive-interface
+  exit-af-interface
+  !
+  af-interface Vlan102
+   summary-address FD00::800/119
+   no passive-interface
+  exit-af-interface
+  !
+  topology base
+  exit-af-topology
+  eigrp router-id 10.250.9.250
+ exit-address-family
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+!
+!
+end
+
+SW9#
