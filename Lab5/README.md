@@ -7,7 +7,15 @@
 
 ![Офис Питербург](./Piter.png)               
 
-/***************** Настройки роутера R16 **********************/                     
+1. Настраиваем отдельные экземпляры автономных систем:                   
+   1.1. autonomous-system 100 для Ipv4.               
+   1.2. autonomous-system 200 для Ipv6.
+2. По умолчанию 
+3. Для того чтобы R32 получал только маршруты по умолчанию на интерфейсе e0/3 R16 прописываю команду summary-address.
+4. R16-17 анонсируют только суммарные префиксы. Суммарные префиксы будем анонсировать в сторону R18.
+   3.1 Суммаризация пользовательских сетей 10.128.16.0/ и 10.128.17.0/24 произведем на SW9 на интерфейсах Vlan101 и Vlan102, SW10 на интерфейсах          
+
+/ ***************** Настройки роутера R16 ********************** /                     
 router eigrp Piter            
  !
  address-family ipv4 unicast autonomous-system 100           
@@ -17,8 +25,8 @@ router eigrp Piter
   exit-af-interface        
   !       
   af-interface Ethernet0/1           
-   summary-address 10.0.2.0 255.255.255.248           
-   summary-address 10.0.2.8 255.255.255.248            
+   summary-address 10.0.2.0 255.255.255.248  / ******* суммаризация транзитных сетей IPv4 в сторону R18  ****** /        
+   summary-address 10.0.2.8 255.255.255.248  / ******* суммаризация транзитных сетей IPv4 в сторону R18  ****** /          
    no passive-interface              
   exit-af-interface          
   !            
@@ -31,7 +39,7 @@ router eigrp Piter
   exit-af-interface             
   !              
   af-interface Ethernet0/3              
-   summary-address 0.0.0.0 0.0.0.0              
+   summary-address 0.0.0.0 0.0.0.0 / ********** маршрут по умолчанию в сторону R32 для IPv4 ************** /             
    no passive-interface             
   exit-af-interface            
   !              
@@ -52,8 +60,8 @@ router eigrp Piter
   exit-af-interface              
   !           
   af-interface Ethernet0/1             
-   summary-address FD00::1000/119             
-   summary-address FD00::FF01:0/120           
+   summary-address FD00::1000/119 / ******* суммаризация транзитных сетей IPv6 в сторону R18  ****** /            
+   summary-address FD00::FF01:0/120   / ******* суммаризация lo IPv6 в сторону R18  ****** /        
    no passive-interface            
   exit-af-interface            
   !           
@@ -66,7 +74,7 @@ router eigrp Piter
   exit-af-interface             
   !            
   af-interface Ethernet0/3             
-   summary-address ::/0               
+   summary-address ::/0    / ********** маршрут по умолчанию в сторону R32 для IPv6 ************** /           
    no passive-interface              
   exit-af-interface              
   !             
@@ -75,3 +83,4 @@ router eigrp Piter
   eigrp router-id 10.250.16.250             
  exit-address-family          
 !                     
+/ ****************************** конец настройки R16 ***************************** /              
