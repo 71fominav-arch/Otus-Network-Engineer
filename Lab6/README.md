@@ -259,8 +259,7 @@ RPKI validation codes: V valid, I invalid, N Not found
  * i 10.250.26.250/32 10.0.16.2                0    100      0 101 520 i      
  *>                   10.0.18.2                              0 301 520 i
 
-
-Конфигурации устройств.    
+  
 [Конфигурации устройств](./Conf/README.md)
 
 
