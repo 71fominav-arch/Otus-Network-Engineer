@@ -149,6 +149,7 @@ R21
 ### Организуете IP доступность между пограничным роутерами офисами Москва и С.-Петербург. 
 
 #### Команды диагностики           
+##### R18
     R18#ping ip 10.250.14.250 source 10.250.18.250        
     Type escape sequence to abort.           
     Sending 5, 100-byte ICMP Echos to 10.250.14.250, timeout is 2 seconds:        
@@ -194,7 +195,72 @@ RPKI validation codes: V valid, I invalid, N Not found
 
 Все пограничные роутеры доступны. Анонсируемые пользовательские сети доступны.            
 
+##### R14           
 
+R14#show bgp ipv4 unicast       
+BGP table version is 22, local router ID is 10.250.14.250           
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,         
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,         
+              x best-external, a additional-path, c RIB-compressed,        
+Origin codes: i - IGP, e - EGP, ? - incomplete        
+RPKI validation codes: V valid, I invalid, N Not found         
+
+     Network          Next Hop            Metric LocPrf Weight Path           
+ * i 10.128.0.0/20    10.0.0.46                0    100      0 i         
+ *>                   0.0.0.0                  0         32768 i             
+ * i 10.128.16.0/20   10.0.18.2                0    100      0 301 520 2042 i          
+ *>                   10.0.16.2                              0 101 520 2042 i          
+ *>  10.250.14.250/32 0.0.0.0                  0         32768 i          
+ r>i 10.250.15.250/32 10.0.0.46                0    100      0 i         
+ *>  10.250.18.250/32 10.0.16.2                              0 101 520 2042 i        
+ * i                  10.0.18.2                0    100      0 301 520 2042 i         
+ *>i 10.250.21.250/32 10.0.18.2                0    100      0 301 i          
+ *                    10.0.16.2                              0 101 301 i        
+ *>  10.250.22.250/32 10.0.16.2                0             0 101 i         
+ *>  10.250.23.250/32 10.0.16.2                              0 101 520 i        
+ * i                  10.0.18.2                0    100      0 301 520 i          
+ *>  10.250.24.250/32 10.0.16.2                              0 101 520 i         
+     Network          Next Hop            Metric LocPrf Weight Path           
+ * i                  10.0.18.2                0    100      0 301 520 i           
+ *>  10.250.25.250/32 10.0.16.2                              0 101 520 i          
+ * i                  10.0.18.2                0    100      0 301 520 i          
+ *>  10.250.26.250/32 10.0.16.2                              0 101 520 i           
+ * i                  10.0.18.2                0    100      0 301 520 i
+
+ ##### R15              
+             
+R15#show bgp ipv4 unicast            
+BGP table version is 14, local router ID is 10.250.15.250             
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,             
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,           
+              x best-external, a additional-path, c RIB-compressed,          
+Origin codes: i - IGP, e - EGP, ? - incomplete          
+RPKI validation codes: V valid, I invalid, N Not found          
+              
+     Network          Next Hop            Metric LocPrf Weight Path          
+ * i 10.128.0.0/20    10.0.0.45                0    100      0 i           
+ *>                   0.0.0.0                  0         32768 i          
+ * i 10.128.16.0/20   10.0.16.2                0    100      0 101 520 2042 i          
+ *>                   10.0.18.2                              0 301 520 2042 i          
+ r>i 10.250.14.250/32 10.0.0.45                0    100      0 i           
+ *>  10.250.15.250/32 0.0.0.0                  0         32768 i         
+ * i 10.250.18.250/32 10.0.16.2                0    100      0 101 520 2042 i           
+ *>                   10.0.18.2                              0 301 520 2042 i          
+ *>  10.250.21.250/32 10.0.18.2                0             0 301 i             
+ *   10.250.22.250/32 10.0.18.2                              0 301 101 i           
+ *>i                  10.0.16.2                0    100      0 101 i              
+ * i 10.250.23.250/32 10.0.16.2                0    100      0 101 520 i              
+ *>                   10.0.18.2                              0 301 520 i         
+ * i 10.250.24.250/32 10.0.16.2                0    100      0 101 520 i       
+     Network          Next Hop            Metric LocPrf Weight Path         
+ *>                   10.0.18.2                              0 301 520 i        
+ * i 10.250.25.250/32 10.0.16.2                0    100      0 101 520 i         
+ *>                   10.0.18.2                              0 301 520 i        
+ * i 10.250.26.250/32 10.0.16.2                0    100      0 101 520 i      
+ *>                   10.0.18.2                              0 301 520 i
+
+
+Конфигурации устройств.    
 
 
 
