@@ -32,10 +32,11 @@
      R24 и R26 клиенты.
 
  / ********************************** R23 ******************************** /                    
-  router bgp 520
-       bgp router-id 10.250.23.250
+ приводятся только настройки для iBGP               
+  router bgp 520               
+       bgp router-id 10.250.23.250             
        bgp cluster-id 10.250.250.250    / ***  для предотвращения петель между двумя RR *** /                
-       network 10.250.23.250 mask 255.255.255.255
+       network 10.250.23.250 mask 255.255.255.255                    
        neighbor RR-CLIENTS peer-group   / *** настройки peer group для клиентов RR  *** /            
        neighbor RR-CLIENTS remote-as 520  / *** настройки peer group для клиентов RR  *** /           
        neighbor RR-CLIENTS update-source Loopback0  / *** настройки peer group для клиентов RR   *** /           
@@ -43,16 +44,17 @@
        neighbor RR-CLIENTS next-hop-self  / *** настройки peer group для клиентов RR в атрибуте next-hop для внешних сетей ставим свой IP Lo0 *** /           
        neighbor 10.250.24.250 peer-group RR-CLIENTS  / *** клиент RR *** /                  
        neighbor 10.250.25.250 remote-as 520  / *** сосед такой же RR *** /                   
-       neighbor 10.250.25.250 update-source Loopback0
-       neighbor 10.250.25.250 next-hop-self
+       neighbor 10.250.25.250 update-source Loopback0                
+       neighbor 10.250.25.250 next-hop-self                
        neighbor 10.250.26.250 peer-group RR-CLIENTS   / *** клиент RR *** /                  
                         
  / ****************************** end R23 ******************************** /               
 
  / ********************************** R25 ******************************** /                    
-  router bgp 520
-        bgp router-id 10.250.25.250            
-        bgp cluster-id 10.250.250.250           
+  приводятся только настройки для iBGP               
+  router bgp 520             
+        bgp router-id 10.250.25.250             
+        bgp cluster-id 10.250.250.250            
         network 10.250.25.250 mask 255.255.255.255             
         neighbor RR-CLIENTS peer-group               
         neighbor RR-CLIENTS remote-as 520                
@@ -67,7 +69,38 @@
                        
  / ****************************** end R25 ******************************** /               
     
+ / ********************************** R24 ******************************** /                    
+  приводятся только настройки для iBGP               
+  router bgp 520                  
+        bgp router-id 10.250.24.250                 
+        bgp log-neighbor-changes                  
+        network 10.250.24.250 mask 255.255.255.255               
+        neighbor 10.250.23.250 remote-as 520 / *** RR 1 *** /                
+        neighbor 10.250.23.250 update-source Loopback0                
+        neighbor 10.250.23.250 next-hop-self                
+        neighbor 10.250.25.250 remote-as 520 / *** RR 2 *** /                               
+        neighbor 10.250.25.250 update-source Loopback0                  
+        neighbor 10.250.25.250 next-hop-self                                      
+ / ****************************** end R24 ******************************** /               
 
+ / ********************************** R26 ******************************** /                    
+  приводятся только настройки для iBGP               
+  router bgp 520                         
+        bgp router-id 10.250.26.250              
+        bgp log-neighbor-changes               
+        network 10.250.26.250 mask 255.255.255.255                 
+        neighbor 10.250.23.250 remote-as 520   / *** RR 1 *** /           
+        neighbor 10.250.23.250 update-source Loopback0              
+        neighbor 10.250.23.250 next-hop-self             
+        neighbor 10.250.25.250 remote-as 520  / *** RR 2 *** /          
+        neighbor 10.250.25.250 update-source Loopback0           
+        neighbor 10.250.25.250 next-hop-self                       
+ / ****************************** end R26 ******************************** /               
+
+
+
+ 
+    
 
 
 
