@@ -97,12 +97,120 @@
         neighbor 10.250.25.250 next-hop-self                       
  / ****************************** end R26 ******************************** /               
 
+### 3. Настройте офиса Москва так, чтобы приоритетным провайдером стал Ламас.        
 
+Для  того, чтобы маршрут через Ламас стал приоритетным, меняем атрибут local-preference. Он по умолчанию 100, ставим 200. Внутри одной AS передается.         
+Для всех входящих маршрутов от peer 10.0.18.2 ставим local-preference 200.               
 
- 
-    
+  / ********************************** R15 ******************************** /                    
+  route-map LP-200-ALL permit 10            
+  set local-preference 200            
 
+  router bgp 1001            
+    bgp router-id 10.250.15.250            
+         neighbor 10.0.18.2 route-map LP-200-ALL in 
+ / ****************************** end R15 ******************************** /               
 
+/ *************** Диагностика R14 *************************************** /
+  R14#show ip bgp neighbors 10.250.15.250 routes          
+BGP table version is 66, local router ID is 10.250.14.250         
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,         
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,          
+              x best-external, a additional-path, c RIB-compressed,         
+Origin codes: i - IGP, e - EGP, ? - incomplete         
+RPKI validation codes: V valid, I invalid, N Not found              
+
+     Network          Next Hop            Metric LocPrf Weight Path           
+ * i 10.128.0.0/20    10.250.15.250            0    100      0 i          
+ *>i 10.128.16.0/20   10.250.15.250            0    200      0 301 520 2042 i           
+ r>i 10.250.15.250/32 10.250.15.250            0    100      0 i           
+ *>i 10.250.18.250/32 10.250.15.250            0    200      0 301 520 2042 i  / ***** LocPrf 200  *** /                 
+ *>i 10.250.21.250/32 10.250.15.250            0    200      0 301 i             
+ *>i 10.250.22.250/32 10.250.15.250            0    200      0 301 101 i            
+ *>i 10.250.23.250/32 10.250.15.250            0    200      0 301 520 i           
+ *>i 10.250.24.250/32 10.250.15.250            0    200      0 301 520 i          
+ *>i 10.250.25.250/32 10.250.15.250            0    200      0 301 520 i              
+ *>i 10.250.26.250/32 10.250.15.250            0    200      0 301 520 i
+   ##### из вывода команды видно, что внешние для AS 1001 сети отправляем соседу с измененным атрибутом  LocPrf 200              
+ R14#show ip bgp       
+BGP table version is 66, local router ID is 10.250.14.250           
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,           
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,        
+              x best-external, a additional-path, c RIB-compressed,        
+Origin codes: i - IGP, e - EGP, ? - incomplete          
+RPKI validation codes: V valid, I invalid, N Not found          
+               
+     Network          Next Hop            Metric LocPrf Weight Path             
+ * i 10.128.0.0/20    10.250.15.250            0    100      0 i                
+ *>                   0.0.0.0                  0         32768 i / *** приоритет сам r14                     
+ *>i 10.128.16.0/20   10.250.15.250            0    200      0 301 520 2042 i / *** приоритет  r15, next hop Lo0 R15, LocPrf 200                                  
+ *                    10.0.16.2                              0 101 520 2042 i             
+ *>  10.250.14.250/32 0.0.0.0                  0         32768 i           
+ r>i 10.250.15.250/32 10.250.15.250            0    100      0 i                
+ *>i 10.250.18.250/32 10.250.15.250            0    200      0 301 520 2042 i              
+ *                    10.0.16.2                              0 101 520 2042 i           
+ *>i 10.250.21.250/32 10.250.15.250            0    200      0 301 i             
+ *                    10.0.16.2                              0 101 301 i           
+ *>i 10.250.22.250/32 10.250.15.250            0    200      0 301 101 i           
+ *                    10.0.16.2                0             0 101 i             
+ *>i 10.250.23.250/32 10.250.15.250            0    200      0 301 520 i             
+ *                    10.0.16.2                              0 101 520 i            
+     Network          Next Hop            Metric LocPrf Weight Path             
+ *>i 10.250.24.250/32 10.250.15.250            0    200      0 301 520 i           
+ *                    10.0.16.2                              0 101 520 i            
+ *>i 10.250.25.250/32 10.250.15.250            0    200      0 301 520 i             
+ *                    10.0.16.2                              0 101 520 i             
+ *>i 10.250.26.250/32 10.250.15.250            0    200      0 301 520 i                     
+ *                    10.0.16.2                              0 101 520 i              
+  
+##### Для внешних маршрутов приоритет через R15 и Ламас. Задание выполнено.                    
+ / *************** end Диагностика R14 *************************************** /                
+/ *************** Диагностика R15 *************************************** /                
+R15#show ip bgp                
+BGP table version is 65, local router ID is 10.250.15.250               
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,            
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,             
+              x best-external, a additional-path, c RIB-compressed,         
+Origin codes: i - IGP, e - EGP, ? - incomplete          
+RPKI validation codes: V valid, I invalid, N Not found          
+
+     Network          Next Hop            Metric LocPrf Weight Path             
+ * i 10.128.0.0/20    10.250.14.250            0    100      0 i         
+ *>                   0.0.0.0                  0         32768 i           
+ *>  10.128.16.0/20   10.0.18.2                     200      0 301 520 2042 i          
+ r>i 10.250.14.250/32 10.250.14.250            0    100      0 i          
+ *>  10.250.15.250/32 0.0.0.0                  0         32768 i         
+ *>  10.250.18.250/32 10.0.18.2                     200      0 301 520 2042 i          
+ *>  10.250.21.250/32 10.0.18.2                0    200      0 301 i          
+ *>  10.250.22.250/32 10.0.18.2                     200      0 301 101 i           
+ *>  10.250.23.250/32 10.0.18.2                     200      0 301 520 i           
+ *>  10.250.24.250/32 10.0.18.2                     200      0 301 520 i         
+ *>  10.250.25.250/32 10.0.18.2                     200      0 301 520 i        
+ *>  10.250.26.250/32 10.0.18.2                     200      0 301 520 i
+   ##### Здесь только маршруты через Ламас
+   ##### Если уронить интерфейс в сторону Ламас, то появился маршрут через R14 R22, резервирование работает.                                      
+
+R15#show ip bgp                  
+BGP table version is 81, local router ID is 10.250.15.250             
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,            
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,           
+              x best-external, a additional-path, c RIB-compressed,          
+Origin codes: i - IGP, e - EGP, ? - incomplete          
+RPKI validation codes: V valid, I invalid, N Not found            
+     Network          Next Hop            Metric LocPrf Weight Path            
+ * i 10.128.0.0/20    10.250.14.250            0    100      0 i           
+ *>                   0.0.0.0                  0         32768 i           
+ *>i 10.128.16.0/20   10.250.14.250            0    100      0 101 520 2042 i          
+ r>i 10.250.14.250/32 10.250.14.250            0    100      0 i           
+ *>  10.250.15.250/32 0.0.0.0                  0         32768 i           
+ *>i 10.250.18.250/32 10.250.14.250            0    100      0 101 520 2042 i           
+ *>i 10.250.21.250/32 10.250.14.250            0    100      0 101 301 i         
+ *>i 10.250.22.250/32 10.250.14.250            0    100      0 101 i            
+ *>i 10.250.23.250/32 10.250.14.250            0    100      0 101 520 i            
+ *>i 10.250.24.250/32 10.250.14.250            0    100      0 101 520 i             
+ *>i 10.250.25.250/32 10.250.14.250            0    100      0 101 520 i          
+ *>i 10.250.26.250/32 10.250.14.250            0    100      0 101 520 i                
+ / *************** end Диагностика R15 *************************************** /                 
 
 
 
