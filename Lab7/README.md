@@ -119,8 +119,8 @@ Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
               x best-external, a additional-path, c RIB-compressed,         
 Origin codes: i - IGP, e - EGP, ? - incomplete         
 RPKI validation codes: V valid, I invalid, N Not found              
-
-     Network          Next Hop            Metric LocPrf Weight Path           
+        
+ / **    Network          Next Hop            Metric LocPrf Weight Path           
  * i 10.128.0.0/20    10.250.15.250            0    100      0 i          
  *>i 10.128.16.0/20   10.250.15.250            0    200      0 301 520 2042 i           
  r>i 10.250.15.250/32 10.250.15.250            0    100      0 i           
@@ -140,7 +140,7 @@ Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
 Origin codes: i - IGP, e - EGP, ? - incomplete          
 RPKI validation codes: V valid, I invalid, N Not found          
                
-     Network          Next Hop            Metric LocPrf Weight Path             
+/ **    Network          Next Hop            Metric LocPrf Weight Path             
  * i 10.128.0.0/20    10.250.15.250            0    100      0 i                
  *>                   0.0.0.0                  0         32768 i / *** приоритет сам r14                     
  *>i 10.128.16.0/20   10.250.15.250            0    200      0 301 520 2042 i / *** приоритет  r15, next hop Lo0 R15, LocPrf 200                                  
@@ -174,7 +174,7 @@ Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
 Origin codes: i - IGP, e - EGP, ? - incomplete          
 RPKI validation codes: V valid, I invalid, N Not found          
 
-     Network          Next Hop            Metric LocPrf Weight Path             
+/ **   Network          Next Hop            Metric LocPrf Weight Path             
  * i 10.128.0.0/20    10.250.14.250            0    100      0 i         
  *>                   0.0.0.0                  0         32768 i           
  *>  10.128.16.0/20   10.0.18.2                     200      0 301 520 2042 i          
@@ -248,7 +248,7 @@ Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
 Origin codes: i - IGP, e - EGP, ? - incomplete        
 RPKI validation codes: V valid, I invalid, N Not found         
 
-     Network          Next Hop            Metric LocPrf Weight Path       
+/ **   Network          Next Hop            Metric LocPrf Weight Path       
  *m  10.128.0.0/20    10.0.20.14                             0 520 301 1001 i           
  *>                   10.0.20.34                             0 520 101 1001 i           
  *>  10.128.16.0/20   0.0.0.0                  0         32768 i            
