@@ -54,5 +54,88 @@ Total number of prefixes 3
                  
 ##### Отдаем сети только своей AS                          
 
-/ ******************** end R14 *************************** /                                          
+/ ******************** end R14 *************************** /                       
+### 2. Настроить фильтрацию в офисе С.-Петербург так, чтобы не появилось транзитного трафика(Prefix-list).
+
+Для того чтобы решить проблему с помощью Prefix-list, записываем в него только сети которые мы отдаем.                       
+
+/ ***************************** R18 ******************************* /                               
+ip prefix-list only-local-net seq 100 permit 10.250.18.250/32                       
+  ip prefix-list only-local-net seq 101 permit 10.128.16.0/20                  
+  route-map filter_net_out permit 100                                    
+   match ip address prefix-list only-local-net                              
+   exit                     
+   router bgp 2042                         
+   neighbor 10.0.20.14 route-map filter_net_out out                         
+   neighbor 10.0.20.34 route-map filter_net_out out                         
+   end                   
+/ ************************* end R18 ******************************* /                    
+/ ************************* Диагностика R18 *********************** /                        
+R18#show ip bgp neighbors 10.0.20.14 advertised-routes               
+BGP table version is 18, local router ID is 10.250.18.250                         
+     Network          Next Hop            Metric LocPrf Weight Path              
+ *>  10.128.0.0/20    10.0.20.14                             0 520 301 1001 i         
+ *>  10.128.16.0/20   0.0.0.0                  0         32768 i             
+ *>  10.250.14.250/32 10.0.20.14                             0 520 301 1001 i             
+ *>  10.250.15.250/32 10.0.20.14                             0 520 301 1001 i            
+ *>  10.250.18.250/32 0.0.0.0                  0         32768 i                
+ *>  10.250.21.250/32 10.0.20.14                             0 520 301 i              
+ *>  10.250.22.250/32 10.0.20.14                             0 520 101 i             
+ *>  10.250.23.250/32 10.0.20.14                             0 520 i             
+ *>  10.250.24.250/32 10.0.20.14               0             0 520 i             
+ *>  10.250.25.250/32 10.0.20.14                             0 520 i               
+ *>  10.250.26.250/32 10.0.20.34               0             0 520 i                  
+                     
+Total number of prefixes 11                    
+R18#show ip bgp neighbors 10.0.20.34 advertised-routes                          
+BGP table version is 18, local router ID is 10.250.18.250                              
+     Network          Next Hop            Metric LocPrf Weight Path                 
+ *>  10.128.0.0/20    10.0.20.14                             0 520 301 1001 i              
+ *>  10.128.16.0/20   0.0.0.0                  0         32768 i              
+ *>  10.250.14.250/32 10.0.20.14                             0 520 301 1001 i               
+ *>  10.250.15.250/32 10.0.20.14                             0 520 301 1001 i             
+ *>  10.250.18.250/32 0.0.0.0                  0         32768 i              
+ *>  10.250.21.250/32 10.0.20.14                             0 520 301 i               
+ *>  10.250.22.250/32 10.0.20.14                             0 520 101 i              
+ *>  10.250.23.250/32 10.0.20.14                             0 520 i              
+ *>  10.250.24.250/32 10.0.20.14               0             0 520 i               
+ *>  10.250.25.250/32 10.0.20.14                             0 520 i                  
+ *>  10.250.26.250/32 10.0.20.34               0             0 520 i                
+                
+Total number of prefixes 11              
+##### Отдаем не только свои сети, но и транзитные.                      
+После применения route-map                    
+R18#show ip bgp neighbors 10.0.20.14 advertised-routes                 
+BGP table version is 18, local router ID is 10.250.18.250               
+     Network          Next Hop            Metric LocPrf Weight Path                    
+ *>  10.128.16.0/20   0.0.0.0                  0         32768 i                  
+ *>  10.250.18.250/32 0.0.0.0                  0         32768 i              
+Total number of prefixes 2                  
+R18#clear ip bgp 10.0.20.34 soft                  
+R18#show ip bgp neighbors 10.0.20.34 advertised-routes                           
+BGP table version is 18, local router ID is 10.250.18.250                            
+     Network          Next Hop            Metric LocPrf Weight Path                   
+ *>  10.128.16.0/20   0.0.0.0                  0         32768 i                   
+ *>  10.250.18.250/32 0.0.0.0                  0         32768 i                 
+                            
+Total number of prefixes 2                      
+##### Отдаем только свои сети                 
+                       
+/ ************************* end R18 ******************************* /                              
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
