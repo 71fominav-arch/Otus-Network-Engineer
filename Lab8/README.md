@@ -181,6 +181,7 @@ Total number of prefixes 0
    exit              
    route-map to_moscow_out permit 110              
     match ip address prefix-list only-default-out               
+   exit                                  
    neighbor 10.0.18.1 default-originate               
    neighbor 10.0.18.1 route-map to_moscow_out out                 
 
