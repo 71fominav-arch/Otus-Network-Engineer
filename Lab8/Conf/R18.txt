@@ -1,0 +1,194 @@
+
+!
+! Last configuration change at 04:55:00 UTC Sat Nov 28 2026
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R18
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 10.250.18.250 255.255.255.255
+ ipv6 address FD00::FF01:12/128
+!
+interface Ethernet0/0
+ no shutdown
+ ip address 10.0.2.18 255.255.255.252
+ ipv6 address FE80::18 link-local
+ ipv6 address FD00::1201/124
+!
+interface Ethernet0/1
+ no shutdown
+ ip address 10.0.2.26 255.255.255.252
+ ipv6 address FE80::18 link-local
+ ipv6 address FD00::1211/124
+!
+interface Ethernet0/2
+ no shutdown
+ ip address 10.0.20.13 255.255.255.252
+ ipv6 address FE80::18 link-local
+ ipv6 address FD00::1832/124
+!
+interface Ethernet0/3
+ no shutdown
+ ip address 10.0.20.33 255.255.255.252
+ ipv6 address FE80::18 link-local
+ ipv6 address FD00::1A32/124
+!
+!
+router eigrp Piter
+ !
+ address-family ipv4 unicast autonomous-system 100
+  !
+  af-interface default
+   passive-interface
+  exit-af-interface
+  !
+  af-interface Ethernet0/0
+   no passive-interface
+  exit-af-interface
+  !
+  af-interface Ethernet0/1
+   no passive-interface
+  exit-af-interface
+  !
+  topology base
+   redistribute static metric 10000 100 255 1 1500
+  exit-af-topology
+  network 10.0.2.16 0.0.0.3
+  network 10.0.2.24 0.0.0.3
+  network 10.0.20.12 0.0.0.3
+  network 10.0.20.32 0.0.0.3
+  network 10.250.18.250 0.0.0.0
+  eigrp router-id 10.250.18.250
+ exit-address-family
+ !
+ address-family ipv6 unicast autonomous-system 200
+  !
+  af-interface default
+   passive-interface
+  exit-af-interface
+  !
+  af-interface Ethernet0/0
+   no passive-interface
+  exit-af-interface
+  !
+  af-interface Ethernet0/1
+   no passive-interface
+  exit-af-interface
+  !
+  topology base
+  exit-af-topology
+  eigrp router-id 10.250.18.250
+ exit-address-family
+!
+router bgp 2042
+ bgp router-id 10.250.18.250
+ bgp log-neighbor-changes
+ bgp bestpath as-path multipath-relax
+ network 10.128.16.0 mask 255.255.240.0
+ network 10.250.18.250 mask 255.255.255.255
+ neighbor 10.0.20.14 remote-as 520
+ neighbor 10.0.20.14 soft-reconfiguration inbound
+ neighbor 10.0.20.14 route-map filter_net_out out
+ neighbor 10.0.20.34 remote-as 520
+ neighbor 10.0.20.34 soft-reconfiguration inbound
+ neighbor 10.0.20.34 route-map filter_net_out out
+ maximum-paths 2
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 0.0.0.0 0.0.0.0 10.0.20.14
+ip route 0.0.0.0 0.0.0.0 10.0.20.34
+ip route 10.0.2.0 255.255.254.0 Null0
+ip route 10.128.16.0 255.255.240.0 Null0
+!
+!
+ip prefix-list only-local-net seq 100 permit 10.250.18.250/32
+ip prefix-list only-local-net seq 101 permit 10.128.16.0/20
+ipv6 route ::/0 FD00::2403:1
+ipv6 route ::/0 FD00::2603:1
+!
+route-map filter_net_out permit 100
+ match ip address prefix-list only-local-net
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end

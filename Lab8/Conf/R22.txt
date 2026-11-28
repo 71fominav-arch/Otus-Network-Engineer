@@ -1,0 +1,158 @@
+
+!
+! Last configuration change at 10:05:50 EKB Sat Nov 28 2026
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R22
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+clock timezone EKB 5 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 10.250.22.250 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ ip address 10.0.16.2 255.255.255.252
+!
+interface Ethernet0/1
+ no shutdown
+ ip address 10.0.18.6 255.255.255.252
+!
+interface Ethernet0/2
+ no shutdown
+ ip address 10.0.16.5 255.255.255.252
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no shutdown
+ ip address 192.168.126.21 255.255.255.0
+!
+router bgp 101
+ bgp router-id 10.250.22.250
+ bgp log-neighbor-changes
+ network 10.250.22.250 mask 255.255.255.255
+ neighbor 10.0.16.1 remote-as 1001
+ neighbor 10.0.16.1 default-originate
+ neighbor 10.0.16.1 soft-reconfiguration inbound
+ neighbor 10.0.16.1 route-map to_moscow_out out
+ neighbor 10.0.16.6 remote-as 520
+ neighbor 10.0.16.6 soft-reconfiguration inbound
+ neighbor 10.0.18.5 remote-as 301
+ neighbor 10.0.18.5 soft-reconfiguration inbound
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 10.0.0.0 255.255.254.0 10.0.16.1
+ip route 10.128.0.0 255.255.240.0 10.0.16.1
+ip route 83.237.235.30 255.255.255.255 192.168.126.2
+ip route 185.40.105.158 255.255.255.255 192.168.126.2
+ip route 194.190.168.1 255.255.255.255 192.168.126.2
+!
+!
+ip prefix-list only-default-out seq 100 permit 0.0.0.0/0
+!
+route-map to_moscow_out permit 100
+ match ip address prefix-list only-default-out
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+ntp server 194.190.168.1
+ntp server 83.237.235.30
+ntp server 185.40.105.158
+!
+end

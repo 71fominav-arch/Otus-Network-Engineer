@@ -1,0 +1,158 @@
+
+!
+! Last configuration change at 05:13:14 UTC Sat Nov 28 2026
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R21
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 10.250.21.250 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ ip address 10.0.18.2 255.255.255.252
+!
+interface Ethernet0/1
+ no shutdown
+ ip address 10.0.18.5 255.255.255.252
+!
+interface Ethernet0/2
+ no shutdown
+ ip address 10.0.18.9 255.255.255.252
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/0
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no shutdown
+ no ip address
+ shutdown
+!
+router bgp 301
+ bgp router-id 10.250.21.250
+ bgp log-neighbor-changes
+ network 10.250.21.250 mask 255.255.255.255
+ neighbor 10.0.18.1 remote-as 1001
+ neighbor 10.0.18.1 default-originate
+ neighbor 10.0.18.1 soft-reconfiguration inbound
+ neighbor 10.0.18.1 route-map to_moscow_out out
+ neighbor 10.0.18.6 remote-as 101
+ neighbor 10.0.18.6 soft-reconfiguration inbound
+ neighbor 10.0.18.10 remote-as 520
+ neighbor 10.0.18.10 soft-reconfiguration inbound
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 10.0.0.0 255.255.254.0 10.0.18.1
+ip route 10.128.0.0 255.255.240.0 10.0.18.1
+!
+!
+ip prefix-list Piter-net seq 100 permit 10.250.18.250/32
+ip prefix-list Piter-net seq 101 permit 10.128.16.0/20
+!
+ip prefix-list only-default-out seq 100 permit 0.0.0.0/0
+!
+route-map to_moscow_out permit 100
+ match ip address prefix-list Piter-net
+!
+route-map to_moscow_out permit 110
+ match ip address prefix-list only-default-out
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end
